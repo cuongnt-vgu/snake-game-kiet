@@ -6,7 +6,7 @@
 // struct for a node in a doubly linked list
 typedef struct node {
     void* data;
-
+    int x,y;
     struct node* next;
     struct node* prev;
 } node_t;
