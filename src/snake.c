@@ -11,6 +11,10 @@
 #include "game_setup.h"
 #include "mbstrings.h"
 #include "render.h"
+#include <string.h>
+#include "common.h"
+
+
 
 /** Gets the next input from the user, or returns INPUT_NONE if no input is
  * provided quickly enough.
@@ -45,13 +49,13 @@ void end_game(int* cells, size_t width, size_t height, snake_t* snake_p) {
     teardown(cells, snake_p);
 
     // ****************** UNCOMMENT THIS CODE IN PART 2B ***********************
-    /*
+    
     // Render final GAME OVER PRESS ANY KEY TO EXIT screen
     render_game_over(width, height);
     usleep(1000 * 1000);  // 1000ms
     cbreak(); // Leave halfdelay mode
     getch();
-    */
+    
 
     // tell ncurses that we're done
     endwin();
@@ -108,26 +112,38 @@ int main(int argc, char** argv) {
 
     // Check validity of the board before rendering!
     // TODO: Implement (in Part 1C)
+
+    if (status != INIT_SUCCESS) {
+    printf("Failed to initialize the game board.\n");
+    return EXIT_FAILURE;
+}
     // if ( ? board is not valid ? ) { return EXIT_FAILURE; }
 
     // Read in the player's name & save its name and length
     // TODO: Implement (in Part 2B)
-    // char name_buffer[1000];
-    // read_name(name_buffer);
+    char name_buffer[1000];
+    read_name(name_buffer);
+    g_name_len = strlen(name_buffer);
+
     // ? save name_buffer ?
     // ? save mbslen(name_buffer) ?
 
     // TODO: Remove this message, uncomment the code below this message
     //       and implement Part 1A here.
-    printf(
-        "             ____   \n"
-        "Hello       / . .\\ \n"
-        "CS 300      \\  ---<\n"
-        "student!     \\  /  \n"
-        "   __________/ /    \n"
-        "-=:___________/\n");
-
     // initialize_window(width, height);
     // TODO: implement the game loop here (Part 1A)!
-    // end_game(cells, width, height, &snake);
+    while (!g_game_over) {
+    enum input_key input = get_input();
+    
+    // Update the game state based on input
+    update(cells, width, height, &snake, input, snake_grows);
+
+    // Render the game to the screen
+    render_game(cells, width, height);
+
+    // Sleep to control the frame rate
+    usleep(1000 * 100); // Sleep for 100ms, for example
+}
+
+    end_game(cells, width, height, &snake);
 }
