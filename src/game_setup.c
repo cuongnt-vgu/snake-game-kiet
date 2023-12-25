@@ -72,10 +72,19 @@ enum board_init_status initialize_default_board(int** cells_p, size_t* width_p,
 enum board_init_status initialize_game(int** cells_p, size_t* width_p,
                                        size_t* height_p, snake_t* snake_p,
                                        char* board_rep) {
-    // TODO: implement!
+    // Initialize the game board
+    *width_p = strlen(board_rep);
+    *height_p = strlen(board_rep) / *width_p;
+    *cells_p = (int*) malloc((*width_p) * (*height_p) * sizeof(int));
+    for (size_t i = 0; i < *height_p; ++i) {
+        for (size_t j = 0; j < *width_p; ++j) {
+            (*cells_p)[i * (*width_p) + j] = board_rep[i * (*width_p) + j] - '0';
+        }
+    }
 
     return INIT_SUCCESS;
 }
+
 
 /** Takes in a string `compressed` and initializes values pointed to by
  * cells_p, width_p, and height_p accordingly. Arguments:
@@ -93,6 +102,29 @@ enum board_init_status initialize_game(int** cells_p, size_t* width_p,
 enum board_init_status decompress_board_str(int** cells_p, size_t* width_p,
                                             size_t* height_p, snake_t* snake_p,
                                             char* compressed) {
-    // TODO: implement!
-    return INIT_UNIMPLEMENTED;
+    // Decompress the board string
+    char* decompressed = (char*) malloc(strlen(compressed) * 2 + 1);
+    size_t i = 0;
+    while (*compressed) {
+        if (*compressed >= DIGIT_START && *compressed <= DIGIT_END) {
+            size_t count = *compressed - DIGIT_START;
+            ++compressed;
+            while (count--) {
+                decompressed[i++] = *compressed;
+            }
+        } else {
+            decompressed[i++] = *compressed;
+        }
+        ++compressed;
+    }
+    decompressed[i] = '\0';
+
+    // Initialize the game with the decompressed board string
+    enum board_init_status status = initialize_game(cells_p, width_p, height_p, snake_p, decompressed);
+
+    // Free the decompressed string
+    free(decompressed);
+
+    return status;
 }
+
