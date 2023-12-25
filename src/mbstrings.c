@@ -23,6 +23,17 @@
  * You will need bitwise operations for this part of the assignment!
  */
 size_t mbslen(const char* bytes) {
-    // TODO: implement!
-    return 0;
+    if (!bytes) {
+        return -1;
+    }
+
+    size_t length = 0;
+    while (*bytes) {
+        if ((*bytes & 0xC0) != 0x80) {
+            length++;
+        }
+        bytes++;
+    }
+
+    return length;
 }
