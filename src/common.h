@@ -2,6 +2,7 @@
 #define COMMON_H
 
 #include <stddef.h>
+#include "linked_list.h"
 
 // Let's see if we can keep this as simple as possible, lest we intimidate
 // students looking through the provided code.
@@ -33,17 +34,40 @@ enum input_key { INPUT_UP, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT, INPUT_NONE };
  *  - g_game_over: 1 if game is over, 0 otherwise
  *  - g_score: current game score. Starts at 0. 1 point for every food eaten.
  */
-extern int g_game_over;  // 1 if game is over, 0 otherwise
-extern int g_score;      // game score: 1 point for every food eaten
 
 /** Snake struct. This struct is not needed until part 2!
  * Fields:
  *  - None yet!
  */
 typedef struct snake {
+  node_t* head;
+  node_t* tail;
     // TODO: Define your snake struct! (in 2A)
     // Store any necessary information about your snake here.
 } snake_t;
+
+typedef struct board {
+    // Board struct — contains basic metadata
+    size_t width;
+    size_t height;
+    int* cells;  // array of integers containing data for each cell on the board
+    snake_t* snake; // pointer to the snake struct for this board
+} board_t;
+
+
+typedef struct game {
+    int g_game_over;    // 1 if game is over, 0 otherwise
+    int g_score;        // game score: 1 point for every food eaten
+    board_t* board;     // pointer to the board struct for this game
+    char* g_name;       // player's name (add this field)
+    size_t g_name_len;  // length of the player's name (add this field)
+    int snake_grows;    // indicates if the snake should grow (add this field)
+} game_t;
+
+extern int g_game_over;  // 1 if game is over, 0 otherwise
+extern int g_score;      // game score: 1 point for every food eaten
+extern size_t g_name_len;
+extern char* g_name;
 
 void set_seed(unsigned seed);
 unsigned generate_index(unsigned size);
