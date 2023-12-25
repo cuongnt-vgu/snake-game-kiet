@@ -45,7 +45,3 @@ void render_game_over(size_t width, size_t height) {
     /* DO NOT MODIFY THIS FUNCTION */
 }
 
-
-    refresh();
-    /* DO NOT MODIFY THIS FUNCTION */
-}
