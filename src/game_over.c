@@ -1,5 +1,6 @@
 #define _XOPEN_SOURCE_EXTENDED 1
 #include "game_over.h"
+#include "common.h"
 
 #include <curses.h>
 #include <errno.h>
@@ -18,7 +19,7 @@
 #define ADDW(Y, X, C) mvadd_wch(Y + BOARD_OFFSET_Y, X + BOARD_OFFSET_X, C)
 #define WRITEW(Y, X, ...) \
     mvprintw(Y + BOARD_OFFSET_Y, X + BOARD_OFFSET_X, __VA_ARGS__)
-
+size_t g_name_len = 0;
 /** Renders the Game Over screen.
  * Arguments:
  *  - width: width of the board
@@ -39,6 +40,11 @@ void render_game_over(size_t width, size_t height) {
            "SCORE: %d", g_score);
 
     WRITEW(y_center + 2, x_center - 10, "PRESS ANY KEY TO EXIT");
+
+    refresh();
+    /* DO NOT MODIFY THIS FUNCTION */
+}
+
 
     refresh();
     /* DO NOT MODIFY THIS FUNCTION */
